@@ -3,14 +3,14 @@ import json
 import string
 import pickle
 from pathlib import Path
+from nltk.stem import PorterStemmer
 
 CACHE_DIR = Path("cache")
 CACHE_DIR_MOVIES = CACHE_DIR / "movies.pkl"
 CACHE_DIR_STOP_WORDS = CACHE_DIR / "stop_words.pkl"
 CACHE_DIR.mkdir(exist_ok=True)
 
-
-
+stemmer = PorterStemmer()
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Keyword Search CLI")
@@ -82,8 +82,8 @@ def load_movies():
     return movies
 
 def check_term(arr1, arr2, stop_words) -> bool:
-    arr1_filtered = [w for w in arr1 if w not in stop_words]
-    arr2_filtered = [w for w in arr2 if w not in stop_words]
+    arr1_filtered = [stemmer.stem(word) for word in arr1 if word not in stop_words]
+    arr2_filtered = [stemmer.stem(word) for word in arr2 if word not in stop_words]
     if any(q_term in t_term for q_term in arr1_filtered for t_term in arr2_filtered):
         return True
     return False
