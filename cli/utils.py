@@ -4,6 +4,8 @@ from nltk.stem import PorterStemmer
 import string
 import json
 
+BM25_K1 = 1.5
+
 CACHE_DIR = Path("cache")
 CACHE_DIR_MOVIES = CACHE_DIR / "movies.pkl"
 CACHE_DIR_STOP_WORDS = CACHE_DIR / "stop_words.pkl"
