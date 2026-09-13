@@ -5,6 +5,7 @@ import string
 import json
 
 BM25_K1 = 1.5
+BM25_B = 0.75
 
 CACHE_DIR = Path("cache")
 CACHE_DIR_MOVIES = CACHE_DIR / "movies.pkl"
