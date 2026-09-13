@@ -29,6 +29,18 @@ class InvertedIndex:
         term_doc_count = len(self.index[term])
         return math.log((doc_count + 1) / (term_doc_count + 1))
 
+    def get_tfidf(self, doc_id, term) -> float:
+        token = tokenize_single_term(term)
+        tf = self.get_tf(doc_id, token)
+        idf = self.get_idf(token)
+        return tf * idf
+
+    def get_bm25_idf(self, term: str) -> float:
+        token = tokenize_single_term(term)
+        doc_count = len(self.docmap)
+        term_doc_count = len(self.index[token])
+        return math.log((doc_count - term_doc_count + 0.5) / (term_doc_count + 0.5) + 1)
+
     def get_documents(self, term) -> list[int]:
         return sorted(self.index.get(term, set()))
 
@@ -104,7 +116,17 @@ def tf_command(doc_id: int, term: str) -> int:
     return idx.get_tf(doc_id, tokenize_single_term(term))
 
 
-def idf_command(term: str) -> None:
+def idf_command(term: str) -> float:
     idx = InvertedIndex()
     idx.load()
     return idx.get_idf(tokenize_single_term(term))
+
+def tfidf_command(doc_id: int, term: str) -> float:
+    idx = InvertedIndex()
+    idx.load()
+    return idx.get_tfidf(doc_id, term)
+
+def bm25_idf_command(term: str) -> float:
+    idx = InvertedIndex()
+    idx.load()
+    return idx.get_bm25_idf(term)
